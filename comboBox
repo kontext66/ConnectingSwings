@@ -1,0 +1,92 @@
+import java.awt.Container;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+public class MainBlank {
+    JTextField tf;
+    JTextField total;
+    JSpinner qty;
+    
+    class ComboItem{
+            private String key;
+            private String value;
+                
+                public ComboItem(String key, String value){
+                    this.key = key;
+                    this.value = value;
+                }
+                
+                @Override
+                public String toString(){
+                    return key;
+                }
+                
+                public String getKey(){
+                    return key;
+                }
+                
+                public int getValue(){
+                    return value;
+                }                            
+        }
+        
+        private void addComponentsToPane(Container pane){
+            JComboBox<ComboItem> comboBox = new JComboBox<ComboItem>();
+            comboBox.addItem(new ComboItem("Plakat","20"));
+            comboBox.addItem(new ComboItem("Halfmoon","50"));
+            comboBox.addItem(new ComboItem("Over Haflmoon","200"));
+            
+            comboBox.addItemListener(new ItemListener(){
+                public void itemStateChanged(ItemEvent event){
+                    if(event.getStateChange() == ItemEvent.SELECTED){
+                        Object item = comboBox.getSelectedItem();
+                        int value = ((ComboItem)item).getValue();
+                        tf.setText(value);
+                    }
+                }
+            });
+            
+            qty = new JSpinner();
+            qty.setModel(new SpinnerNumberModel(0,0,Integer.MAX_VALUE, 1));
+            qty.addChangeListener(new ChangeListener(){
+                @Override
+                public void stateChanged(ChangeEvent e){
+                    JTextField.setText(qty.getValue()* tf.setText(value));
+                }              
+            });
+            
+            total = new JTextField();
+            pane.add(total,BorderLayout.SOUTH);
+            
+            tf = new JTextField();
+            JPanel p = new JPanel();
+            pane.add(comboBox, BorderLayout.NORTH);
+            pane.add(tf, BorderLayout.SOUTH);
+        }
+        
+        private void createAndShowGUI(){
+            JFrame frame = new JFrame();
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            addComponentsToPane(frame.getContentPane());
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+        }
+       
+        
+        public static void main(String[] args){
+            javax.swing.SwingUtilities.invokeLater(new Runnable(){
+                @Override
+                public void run(){
+                    new MainBlank().createAndShowGUI();
+                }    
+            });
+            
+        }
+    }
